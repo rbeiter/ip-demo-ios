@@ -21,6 +21,7 @@
 		583D81461B6FA82E00BF3C56 /* ChannelTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 583D81451B6FA82E00BF3C56 /* ChannelTableViewCell.m */; };
 		584C05901D204EA000F0DBC9 /* ReactionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 584C058F1D204EA000F0DBC9 /* ReactionView.m */; };
 		58652D051BC5BBC800250FEA /* MemberTypingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 58652D041BC5BBC800250FEA /* MemberTypingTableViewCell.m */; };
+		58A1D3011DF95C4600359322 /* Entitlements-Simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 58A1D3001DF95C4600359322 /* Entitlements-Simulator.plist */; };
 		58D509101B7B78D20093B5F1 /* ChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D5090F1B7B78D20093B5F1 /* ChannelViewController.m */; };
 		58D509131B7B7AF00093B5F1 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D509121B7B7AF00093B5F1 /* MessageTableViewCell.m */; };
 		58E2F6431DA8209D00A5F23C /* ChatManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E2F6411DA8209D00A5F23C /* ChatManager.m */; };
@@ -54,6 +55,7 @@
 		584C058F1D204EA000F0DBC9 /* ReactionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReactionView.m; sourceTree = "<group>"; };
 		58652D031BC5BBC800250FEA /* MemberTypingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberTypingTableViewCell.h; sourceTree = "<group>"; };
 		58652D041BC5BBC800250FEA /* MemberTypingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberTypingTableViewCell.m; sourceTree = "<group>"; };
+		58A1D3001DF95C4600359322 /* Entitlements-Simulator.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Simulator.plist"; sourceTree = "<group>"; };
 		58D5090E1B7B78D20093B5F1 /* ChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelViewController.h; sourceTree = "<group>"; };
 		58D5090F1B7B78D20093B5F1 /* ChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelViewController.m; sourceTree = "<group>"; };
 		58D509111B7B7AF00093B5F1 /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			children = (
 				58223ABB1B69571C00F0DF97 /* Info.plist */,
 				58223ABC1B69571C00F0DF97 /* main.m */,
+				58A1D3001DF95C4600359322 /* Entitlements-Simulator.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 				58223AC61B69571C00F0DF97 /* Main.storyboard in Resources */,
 				58223ACB1B69571C00F0DF97 /* LaunchScreen.xib in Resources */,
 				58223AC81B69571C00F0DF97 /* Images.xcassets in Resources */,
+				58A1D3011DF95C4600359322 /* Entitlements-Simulator.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +351,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = "$SRCROOT/Demo-ObjC/Entitlements-Simulator.plist";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
