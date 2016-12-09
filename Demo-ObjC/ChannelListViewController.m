@@ -33,6 +33,14 @@
     [self.refreshControl addTarget:self
                             action:@selector(refreshChannels)
                   forControlEvents:UIControlEventValueChanged];
+    
+    UILabel *noChannelsLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    noChannelsLabel.hidden = YES;
+    noChannelsLabel.text = @"You have no channels yet!\n\nCreate or join a channel\nby tapping the '+' button.";
+    noChannelsLabel.numberOfLines = 0;
+    noChannelsLabel.center = self.tableView.center;
+    noChannelsLabel.textAlignment = NSTextAlignmentCenter;
+    self.tableView.backgroundView = noChannelsLabel;
 
     TwilioChatClient *client = [[ChatManager sharedManager] client];
     if (client) {
@@ -46,7 +54,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.tableView reloadData];
+    [self reloadData];
 }
 
 #pragma mark - Navigation
@@ -59,7 +67,7 @@
 }
 
 - (IBAction)returnFromChannel:(UIStoryboardSegue *)segue {
-    [self.tableView reloadData];
+    [self reloadData];
 }
 
 - (IBAction)logoutTapped:(id)sender {
@@ -304,9 +312,22 @@
 
 #pragma mark - Demo helpers
 
+- (void)reloadData {
+    [self.tableView reloadData];
+    [self updateChannelsHint];
+}
+
+- (void)updateChannelsHint {
+    if (self.channels && self.channels.count == 0) {
+        self.tableView.backgroundView.hidden = NO;
+    } else {
+        self.tableView.backgroundView.hidden = YES;
+    }
+}
+
 - (void)populateChannels {
     self.channels = nil;
-    [self.tableView reloadData];
+    [self reloadData];
 
     TCHChannels *channelsList = [[[ChatManager sharedManager] client] channelsList];
     if (channelsList) {
@@ -314,23 +335,31 @@
         
         void __block (^_completion)();
         TCHChannelPaginatorCompletion completion = ^(TCHResult *result, TCHChannelPaginator *paginator) {
-            [newChannels addObjectsFromArray:[paginator items]];
-            
-            if ([paginator hasNextPage]) {
-                [paginator requestNextPageWithCompletion:_completion];
-            } else {
-                // reached last page
+            if (result.isSuccessful) {
+                [newChannels addObjectsFromArray:[paginator items]];
                 
-                [self sortChannels:newChannels];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.channels = newChannels;
-                    [self.tableView reloadData];
-                });
+                if ([paginator hasNextPage]) {
+                    [paginator requestNextPageWithCompletion:_completion];
+                } else {
+                    // reached last page
+                    
+                    [self sortChannels:newChannels];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        self.channels = newChannels;
+                        [self reloadData];
+                    });
+                }
+            } else {
+                [DemoHelpers displayToastWithMessage:@"Unable to load user channels."
+                                              inView:self.view];
             }
         };
         _completion = completion;
         
         [channelsList userChannelsWithCompletion:completion];
+    } else {
+        [DemoHelpers displayToastWithMessage:@"Unable to load user channels."
+                                      inView:self.view];
     }
 }
 
@@ -371,7 +400,7 @@
                                           inView:self.view];
             NSLog(@"%s: %@", __FUNCTION__, result.error);
         }
-        [self.tableView reloadData];
+        [self reloadData];
     }];
 }
 
@@ -385,7 +414,7 @@
                                           inView:self.view];
             NSLog(@"%s: %@", __FUNCTION__, result.error);
         }
-        [self.tableView reloadData];
+        [self reloadData];
     }];
 }
 
@@ -399,7 +428,7 @@
                                           inView:self.view];
             NSLog(@"%s: %@", __FUNCTION__, result.error);
         }
-        [self.tableView reloadData];
+        [self reloadData];
     }];
 }
 
@@ -413,7 +442,7 @@
                                           inView:self.view];
             NSLog(@"%s: %@", __FUNCTION__, result.error);
         }
-        [self.tableView reloadData];
+        [self reloadData];
     }];
 }
 
@@ -568,16 +597,16 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void)chatClient:(TwilioChatClient *)client channelAdded:(TCHChannel *)channel {
     [self.channels addObject:channel];
     [self sortChannels:self.channels];
-    [self.tableView reloadData];
+    [self reloadData];
 }
 
 - (void)chatClient:(TwilioChatClient *)client channelChanged:(TCHChannel *)channel {
-    [self.tableView reloadData];
+    [self reloadData];
 }
 
 - (void)chatClient:(TwilioChatClient *)client channelDeleted:(TCHChannel *)channel {
     [self.channels removeObject:channel];
-    [self.tableView reloadData];
+    [self reloadData];
 }
 
 - (void)chatClient:(TwilioChatClient *)client errorReceived:(TCHError *)error {
